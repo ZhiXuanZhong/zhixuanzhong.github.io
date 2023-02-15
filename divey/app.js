@@ -16,28 +16,33 @@ function formatDate(date) {
 
 function addThreadList(thread){
 
-    const html = `
-    <div class="thread ${thread.isFollow === 1 ? "thread-followed":""}">
-        <a href="thread.html?id=${thread.id}">
-            <div class="thread-icon">
-                <i class="fa fa-question-circle fa-3x" aria-hidden="true"></i>
+    if(thread.isDelete !== 1){
+        const html = `
+        <div class="thread ${thread.isFollow === 1 ? "thread-followed":""}">
+            <a href="thread.html?id=${thread.id}">
+                <div class="thread-icon">
+                    <i class="fa fa-question-circle fa-3x" aria-hidden="true"></i>
+                </div>
+                <div class="thread-content">
+                    <h1 class="thread-content-title">${thread.title}</h1>
+                    <ul class="thread-content-info">
+                        <li class="thread-content-info-author">Posted by ${thread.author}</li>
+                        <li class="thread-content-info-replaycount">${thread.comments.length} ${thread.comments.length > 1 ? "comments" : "comment"}</li>
+                        <li class="thread-content-info-date">${formatDate(new Date(thread.date))}</li>
+                    </ul>
+                </div>
+            </a>
+            <div class="thread-follow">
+                ${thread.author === user.username ? '<button id="edit-btn">Edit</button>' : ''}
+                <button id="follow-btn">${thread.isFollow === 1 ? "Followed":"Follow"}</button>
             </div>
-            <div class="thread-content">
-                <h1 class="thread-content-title">${thread.title}</h1>
-                <ul class="thread-content-info">
-                    <li class="thread-content-info-author">Posted by ${thread.author}</li>
-                    <li class="thread-content-info-replaycount">${thread.comments.length} ${thread.comments.length > 1 ? "comments" : "comment"}</li>
-                    <li class="thread-content-info-date">${formatDate(new Date(thread.date))}</li>
-                </ul>
-            </div>
-        </a>
-        <div class="thread-follow">
-            <button id="follow-btn">${thread.isFollow === 1 ? "Followed":"Follow"}</button>
         </div>
-    </div>
-            `;
+                `
 
-    return html
+        return html
+    }
+
+    return ''
 }
 
 function addComment(comment){
@@ -89,6 +94,7 @@ function NewPost(id, title, author, content){
         author: author,
         date: Date.now(),
         isFollow:1,
+        isDelete:0,
         content:content,
         comments: []
       }
@@ -115,9 +121,17 @@ function addNewPost(){
 
 }
 
+(function () {
+	window.onpageshow = function(event) {
+		if (event.persisted) {
+			window.location.reload();
+		}
+	};
+})();
+
 let path = window.location.pathname;
 let page = path.split("/").pop();
-
+let editId
 
 if (page === "index.html") {
   setUsername()
@@ -129,12 +143,14 @@ if (page === "index.html") {
   }
 
   let body = document.querySelector('body')
+
+  
   body.addEventListener("click", (event) => {
     if (event.target.id === "follow-btn") {
         setFollowState(event.target)
     }
 
-    if(event.target.id === "new-post-btn"){
+    if(event.target.id === "new-post-btn" || event.target.id ==='mobile-post-btn'){
         let postWindow = document.querySelector(".new-post-backdrop")
         postWindow.classList.toggle('new-post-display')
     }
@@ -150,17 +166,64 @@ if (page === "index.html") {
         }
              
     }
-    
+
+    // load edit panel
+    if(event.target.id === "edit-btn"){
+        let postWindow = document.querySelector(".edit-post-backdrop")
+        postWindow.classList.toggle('new-post-display')
+
+        let url = event.target.parentElement.previousElementSibling.getAttribute('href')
+        editId = url.slice(url.indexOf('=')+1)
+        thread = threads[editId]
+
+        let title = document.querySelector("#edit-post-title")
+        let textarea = document.querySelector("#edit-post-content")
+
+        title.value = thread.title
+        textarea.value = thread.content
+
+    }
+
+    if(event.target.id === "edit-post-btn"){
+        let title = document.querySelector("#edit-post-title")
+        let textarea = document.querySelector("#edit-post-content")
+
+        thread = threads[editId]
+        thread.title = title.value
+        thread.content = textarea.value
+        localStorage.setItem('threads',JSON.stringify(threads))
+        title.value = ''
+        textarea.value = ''
+        alert('Post updated!')
+        location.reload()
+    }
+
+
+    if(event.target.id === "delete-post-btn"){
+
+        thread = threads[editId]
+        thread.isDelete = 1
+        localStorage.setItem('threads',JSON.stringify(threads))
+        alert('Post Deleted!')
+
+        let title = document.querySelector("#edit-post-title")
+        let textarea = document.querySelector("#edit-post-content")
+        title.value = ''
+        textarea.value = ''
+
+        location.reload()
+    }
+
     if(event.target.id === "cancel-post-btn"){
         
-        let postWindow = document.querySelector(".new-post-backdrop")
+        let postWindow = event.target.parentElement.parentElement.parentElement.parentElement
         postWindow.classList.toggle('new-post-display')
     }
   });
 }
 
 
-let thread
+
 
 if (page === "thread.html") {
     setUsername()
@@ -202,14 +265,13 @@ if (page === "thread.html") {
             window.alert('Enter your comments before submitting.')
         }
 
-
         }
 
         if (event.target.id === "follow-btn") {
             setFollowState(event.target)
         }
         
-        if(event.target.id === "new-post-btn"){
+        if(event.target.id === "new-post-btn" || event.target.id ==='mobile-post-btn'){
             let postWindow = document.querySelector(".new-post-backdrop")
             postWindow.classList.toggle('new-post-display')
         }
@@ -217,7 +279,7 @@ if (page === "thread.html") {
         if(event.target.id === "submit-post-btn"){
             
             addNewPost()
-            window.location.href = `/thread.html?id=${threads.length-1}`;
+            window.location.href = `thread.html?id=${threads.length-1}`;
         }
         
         if(event.target.id === "cancel-post-btn"){
@@ -226,9 +288,45 @@ if (page === "thread.html") {
             postWindow.classList.toggle('new-post-display')
         }
         
-// 把thread page加上對應按鈕function可以動
-// --把new post新頁面建立起來
 
+        // load edit panel
+        if(event.target.id === "edit-btn"){
+            let postWindow = document.querySelector(".edit-post-backdrop")
+            postWindow.classList.toggle('new-post-display')
+    
+            let title = document.querySelector("#edit-post-title")
+            let textarea = document.querySelector("#edit-post-content")
+    
+            title.value = thread.title
+            textarea.value = thread.content
+        }
+
+        if(event.target.id === "edit-post-btn"){
+            let title = document.querySelector("#edit-post-title")
+            let textarea = document.querySelector("#edit-post-content")
+    
+            thread.title = title.value
+            thread.content = textarea.value
+            localStorage.setItem('threads',JSON.stringify(threads))
+            title.value = ''
+            textarea.value = ''
+            alert('Post updated!')
+            location.reload()
+        }
+
+        if(event.target.id === "delete-post-btn"){
+
+            thread.isDelete = 1
+            localStorage.setItem('threads',JSON.stringify(threads))
+            alert('Post Deleted!')
+    
+            let title = document.querySelector("#edit-post-title")
+            let textarea = document.querySelector("#edit-post-content")
+            title.value = ''
+            textarea.value = ''
+    
+            location.href = 'index.html'
+        }
 
 
     })

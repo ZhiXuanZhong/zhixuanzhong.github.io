@@ -13,7 +13,9 @@
 <body>
     <nav>
         <div class="identity">
-            <div>logged in as <span id="username"></span></div>
+            <i id="mobile-back-arrow" class="fa-solid fa-2x fa-arrow-left mobile" onclick="window.history.go(-1);"></i>
+            <div class="login-state">Hello, <span id="username"></span></div>
+            <button id="mobile-post-btn" class="mobile">＋ New Post</button>
         </div>
         <div class="container">
             <div class="logo">
@@ -69,8 +71,31 @@
         </section>
     </div>
 
+    <div class="edit-post-backdrop">
+        <section class="edit-post">
+            
+                <div class="new-post-title">Edit Post</div>
+
+                <div class="thread-reply">
+                    <div class="new-post-label">Title</div>
+                    <input type="text" id="edit-post-title" placeholder="Start typing here ...">
+                </div>
+
+                <div class="thread-reply">
+                    <div class="new-post-label">Description</div>
+                    <textarea id="edit-post-content" placeholder="在您送出前已理解，本服務僅用於示範目的，您所送出的資訊將存於瀏覽器中提供存取，故請勿送出個人敏感資訊。 Before you proceed, you understand that this service is intended for demonstration purposes only - the information you submit will be stored in your browser for access, therefore please DO NOT submit any sensitive information." ></textarea>
+                    <div class="submit-btn">
+                        <button id="cancel-post-btn">Cancle</button>
+                        <button id="delete-post-btn">Delete</button>
+                        <button id="edit-post-btn">Submit</button>
+                    </div>
+                </div>
+
+        </section>
+    </div>
+
     <div id="clear-localStorage">
-        <button class="clear-button" onclick="localStorage.clear();location.reload()" >Clear localStorage</button>
+        <button class="clear-button" onclick="localStorage.clear();window.location.href = 'index.html'" >Clear localStorage</button>
     </div>
 
     <script src="data.js"></script>

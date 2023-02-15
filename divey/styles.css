@@ -27,7 +27,7 @@ a{
 /* navbar sytles */
 .identity{
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     height: 40px;
     background-color: #f0ffff32;
@@ -90,7 +90,7 @@ flex-grow: 7;
     outline:none;
 }
 
-.submit-btn button{
+.submit-btn button, #mobile-post-btn {
     flex-grow: 2;
     margin-top: 20px;
 
@@ -110,6 +110,21 @@ flex-grow: 7;
 }
 
 .submit-btn button:active{
+    transform: scale(0.95);
+}
+
+#mobile-post-btn{
+    flex-grow: unset;
+    margin: unset;
+    font-size: 14px;
+    padding: 6px 10px;
+}
+
+#mobile-post-btn:hover{
+    background-color: #fc8851;
+}
+
+#mobile-post-btn:active{
     transform: scale(0.95);
 }
 /* thread styles */
@@ -184,10 +199,12 @@ padding-left: 20px;
 }
 
 
-
 .thread-follow button{
+    display: inline-block;
     justify-content: center;
     align-items: center;
+
+    margin-left: 5px;
 
     background-color: #a7e3b6;
     color: #64858c;
@@ -197,7 +214,7 @@ padding-left: 20px;
     padding: 8px 15px;
     border: 0px solid #000;
     border-radius: 6px;
-    display: inline-block;
+
 }
 
 .thread-follow button:hover{
@@ -208,15 +225,30 @@ padding-left: 20px;
 order: -1;
 }
 
-.thread-followed button{
+.thread-followed #follow-btn{
     background-color: #fc7300;
     color: #00425a;
 }
 
-.thread-followed button:hover{
+.thread-followed #follow-btn:hover{
     background-color: #fc8851;
 }
 
+#follow-btn:active{
+    transform: scale(0.95);
+   }
+
+#edit-btn{
+    background-color: seashell;
+}
+
+#edit-btn:hover{
+    background-color: rgb(255, 232, 215);
+}
+
+#edit-btn:active{
+    transform: scale(0.95);
+   }
 /* styles for thread details start */
 
 
@@ -270,7 +302,7 @@ order: -1;
 }
 
 
-textarea, #title-text {
+textarea, #title-text, #edit-post-title {
     padding: 10px 14px;
 
     width: 100%; 
@@ -302,9 +334,10 @@ margin-top: 5px;
 
 .submit-btn button{
 margin-top: 0;
+margin: 0 15px;
 }
 
-#cancel-post-btn, #submit-post-btn{
+#cancel-post-btn, #delete-post-btn, #submit-post-btn, #edit-post-btn{
     font-size: 15px;
 
 }
@@ -337,10 +370,6 @@ margin-top: 0;
     border-radius: 20px;
 }
 
-.new-post-display{
-    display: unset;
-}
-
 .new-post-title{
     text-align: center;
     font-weight: 800;
@@ -353,13 +382,11 @@ margin-top: 0;
     padding-left: 4px;
 }
 
-#title-text{
+#title-text, #edit-post-title{
     min-height: unset;
 }
 
-#clear-localStorage{
 
-}
 
 button.clear-button{
     position: fixed;
@@ -377,21 +404,55 @@ button.clear-button{
     border: 0px solid #000;
     border-radius: 10px;
     display: inline-block;
-   }
+}
 
-   button.clear-button:hover{
+button.clear-button:hover{
     background-color: #d05454;
-   }
+}
 
-   button.clear-button:active{
+button.clear-button:active{
     transform: scale(0.95);
-   }
+}
 
-@media screen and (max-width:900px) { 
+.edit-post-backdrop{
+    display: none;
+    background-color: rgba(0,0,0,0.3);
+    width:100%;
+    height:100%;
+    top: 0;
+    position: fixed;
+}
+
+.edit-post{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 50px;
+    padding: 20px 20px;
+
+    background-color: #fff;
+    border-radius: 20px;
+}
+
+.new-post-display{
+    display: unset;
+}
+
+
+.mobile{
+    visibility: hidden;
+}
+@media screen and (max-width:1000px) { 
     nav > div.container{
     width: 90%;
     margin-bottom: 10px;
+    }
 
+    .login-state{
+        margin-left: 60px;
     }
 
     .container{
@@ -399,8 +460,26 @@ button.clear-button{
 
     }
     
+    .mobile{
+        visibility: unset;
+    }
+
+    .identity {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 50px;
+        padding: 0 20px;
+        background-color: #f0ffff32;
+        color: #34495e;
+    }
+
+    #new-post-btn{
+        visibility: hidden;
+    }
+
     .thread{
-        flex-direction: column-reverse;
+        flex-direction: column;
         margin-bottom: 10px;
     }
 
@@ -425,5 +504,12 @@ button.clear-button{
     .thread-body{
         margin: 0 auto;
         width: 90%;
+    }
+
+    .thread-follow button {
+        margin-left: unset;
+        margin-right: 5px;
+        margin-bottom: 8px;
+
     }
   }
