@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css" />
+    <title>Divey</title>
+</head>
+
+<body>
+    <nav>
+        <div class="identity">
+            <div>logged in as <span id="username"></span></div>
+        </div>
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">Divey</a>
+                <p>Dive safe, Dive fun.</p>
+            </div>
+            <div class="search">
+                <input type="text">
+            </div>
+            <div class="submit-btn">
+                <button id="new-post-btn" >＋ New post</button>
+            </div>
+         </div>
+    </nav>
+
+    <section class="container" id="thread-list">
+
+        <div class="thread-body" >
+
+            <div id="comments-area">
+            </div>
+        
+            <div class="thread-reply">
+                <textarea id="comment-reply" placeholder="在您送出前已理解，本服務僅用於示範目的，您所送出的資訊將存於瀏覽器中提供存取，故請勿送出個人敏感資訊。 Before you proceed, you understand that this service is intended for demonstration purposes only - the information you submit will be stored in your browser for access, therefore please DO NOT submit any sensitive information." ></textarea>
+                <div class="submit-btn">
+                    <button id="submit-comment-btn">Submit</button>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <div class="new-post-backdrop">
+        <section class="new-post">
+            
+                <div class="new-post-title">New Post</div>
+
+                <div class="thread-reply">
+                    <div class="new-post-label">Title</div>
+                    <input type="text" id="title-text" placeholder="Start typing here ...">
+                </div>
+
+                <div class="thread-reply">
+                    <div class="new-post-label">Description</div>
+                    <textarea id="new-post-content" placeholder="在您送出前已理解，本服務僅用於示範目的，您所送出的資訊將存於瀏覽器中提供存取，故請勿送出個人敏感資訊。 Before you proceed, you understand that this service is intended for demonstration purposes only - the information you submit will be stored in your browser for access, therefore please DO NOT submit any sensitive information." ></textarea>
+                    <div class="submit-btn">
+                        <button id="cancel-post-btn">Cancle</button>
+                        <button id="submit-post-btn">Submit</button>
+                    </div>
+                </div>
+                
+        </section>
+    </div>
+
+    <div id="clear-localStorage">
+        <button class="clear-button" onclick="localStorage.clear();location.reload()" >Clear localStorage</button>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
