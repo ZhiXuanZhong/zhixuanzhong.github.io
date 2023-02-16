@@ -446,7 +446,11 @@ button.clear-button:active{
     visibility: hidden;
 }
 @media screen and (max-width:1000px) { 
+
+
+
     nav > div.container{
+    margin-top: 50px;
     width: 90%;
     margin-bottom: 10px;
     }
@@ -465,12 +469,18 @@ button.clear-button:active{
     }
 
     .identity {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+
+
         display: flex;
         justify-content: space-between;
         align-items: center;
         height: 50px;
         padding: 0 20px;
-        background-color: #f0ffff32;
+        background-color: #7D9CA3;
         color: #34495e;
     }
 
